@@ -1,4 +1,4 @@
-module github.com/moznion/go-optional
+module github.com/tapp-ai/go-optional
 
 go 1.19
 
