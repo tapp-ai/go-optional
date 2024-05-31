@@ -7,8 +7,7 @@ import (
 )
 
 var (
-	ErrSQLScannerIncompatibleDataType      = errors.New("incompatible data type for SQL scanner on Option[T]")
-	ErrSQLDriverValuerIncompatibleDataType = errors.New("incompatible data type for SQL driver Valuer on Option[T]")
+	ErrSQLScannerIncompatibleDataType = errors.New("incompatible data type for SQL scanner on Option[T]")
 )
 
 // Scan assigns a value from a database driver.
@@ -36,11 +35,5 @@ func (o Option[T]) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	v := o.Unwrap()
-	switch (interface{})(v).(type) {
-	case string, []byte, int64, float64, bool, time.Time:
-		return v, nil
-	default:
-		return nil, ErrSQLDriverValuerIncompatibleDataType
-	}
+	return driver.DefaultParameterConverter.ConvertValue(o.Unwrap())
 }
